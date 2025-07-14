@@ -13,17 +13,10 @@ export class SidebarComponent {
   currentUser = {
     name: 'Sarah Johnson'
   };
-  
-  // Medical Center section state
-  isMedicalCenterExpanded: boolean = false;
 
   constructor(private router: Router) {}
 
   navigateToMyAccount(): void {
     this.router.navigate(['/settings']);
-  }
-  
-  toggleMedicalCenter(): void {
-    this.isMedicalCenterExpanded = !this.isMedicalCenterExpanded;
   }
 }
