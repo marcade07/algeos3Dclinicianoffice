@@ -23,7 +23,6 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Date of Birth</th>
-          <th>Business Partner</th>
           <th>Number of Prescriptions</th>
           <th>Patient ID</th>
           <th>Actions</th>
@@ -38,7 +37,6 @@
             <td>{{ patient.firstName }}</td>
             <td>{{ patient.lastName }}</td>
             <td>{{ formatDateToEuropean(patient.dateOfBirth) }}</td>
-            <td>{{ patient.businessPartner }}</td>
             <td>{{ patient.numberOfConfections }}</td>
             <td class="monospace">{{ patient.patientId }}</td>
             <td class="action-buttons" (click)="$event.stopPropagation()">
@@ -64,7 +62,7 @@
           
           <!-- Expanded Confections Row -->
           <tr *ngIf="isPatientExpanded(patient.id)" class="confections-row">
-            <td colspan="7" class="confections-container">
+            <td colspan="6" class="confections-container">
               <div class="confections-header">
                 <h6><i class="bi bi-list-ul me-2"></i>Prescriptions for {{ patient.firstName }} {{ patient.lastName }}</h6>
               </div>
