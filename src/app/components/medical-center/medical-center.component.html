@@ -82,15 +82,13 @@
               </span>
             </td>
             <td class="action-buttons">
-              <button 
+              <button
+                *ngIf="user.firstName !== 'Dr. Robert' || user.lastName !== 'Thompson'"
                 class="btn btn-sm" 
                 [class]="user.status === 'Active' ? 'btn-outline-warning' : 'btn-outline-success'"
                 [title]="user.status === 'Active' ? 'Deactivate' : 'Activate'"
                 (click)="toggleUserStatus(user)">
                 <i class="bi" [class]="user.status === 'Active' ? 'bi-person-x' : 'bi-person-check'"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-dark" title="Reset Password" (click)="resetPassword(user)">
-                <i class="bi bi-key"></i>
               </button>
               <button class="btn btn-sm btn-outline-dark" title="View Profile" (click)="viewProfile(user)">
                 <i class="bi bi-eye"></i>
