@@ -12,8 +12,7 @@ import { ConfectionsComponent } from './components/confections/confections.compo
 import { CustomersComponent } from './components/customers/customers.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: '', redirectTo: '/users', pathMatch: 'full' },
   { path: 'users', component: UsersComponent },
   { path: 'patients', component: PatientsComponent },
   { path: 'prescriptions', component: ConfectionsComponent },
