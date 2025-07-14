@@ -61,7 +61,6 @@
           <th>Date Created</th>
           <th>Order Number</th>
           <th>Ordered by</th>
-          <th>Business Partner</th>
           <th>Status</th>
           <th>Order Price</th>
           <th>Insoles</th>
@@ -77,8 +76,7 @@
               (click)="toggleOrderExpansion(order, $event)">
             <td>{{ formatDateToEuropean(order.dateCreated) }}</td>
             <td class="monospace">{{ order.orderNumber }}</td>
-            <td>{{ order.orderedBy }}</td>
-            <td>{{ order.businessPartner }}</td>
+            <td>Dr. Robert Thompson</td>
             <td>
               <span class="badge" [ngClass]="{
                 'bg-warning': order.status === 'Send',
