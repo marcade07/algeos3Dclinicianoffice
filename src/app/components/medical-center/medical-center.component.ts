@@ -380,34 +380,6 @@ export class MedicalCenterComponent implements OnInit {
     
     return [headers, ...rows].join('\n');
   }
-  // Helper method to convert data to CSV format
-  private convertToCSV(data: any[], columns: { key: string, header: string }[]): string {
-    if (!data || data.length === 0) {
-      // Return just headers if no data
-      return columns.map(col => col.header).join(',');
-    }
-    
-    // Create header row
-    const headers = columns.map(col => col.header).join(',');
-    
-    // Create data rows
-    const rows = data.map(item => {
-      return columns.map(col => {
-        const value = item[col.key];
-        // Handle values that might contain commas or quotes
-        if (value === null || value === undefined) {
-          return '';
-        }
-        const stringValue = String(value);
-        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
-          return `"${stringValue.replace(/"/g, '""')}"`;
-        }
-        return stringValue;
-      }).join(',');
-    });
-    
-    return [headers, ...rows].join('\n');
-  }
 
   // Helper method to download CSV file
   private downloadCSV(csvContent: string, filename: string) {
@@ -427,29 +399,6 @@ export class MedicalCenterComponent implements OnInit {
       
       // Show success message to user
       alert(`${filename.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())} data has been exported successfully!`);
-    } else {
-      console.error('Download not supported in this browser');
-      alert('Download not supported in this browser');
-    }
-  }
-  // Helper method to download CSV file
-  private downloadCSV(csvContent: string, filename: string) {
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', `${filename}-${new Date().toISOString().split('T')[0]}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      console.log(`Successfully exported ${filename} data as CSV`);
-      
-      // Show success message to user
-      alert(`${filename.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} data has been exported successfully!`);
     } else {
       console.error('Download not supported in this browser');
       alert('Download not supported in this browser');
