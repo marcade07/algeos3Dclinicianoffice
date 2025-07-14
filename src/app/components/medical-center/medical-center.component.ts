@@ -46,9 +46,11 @@ export class MedicalCenterComponent implements OnInit {
 
   // Users functionality (from Users component)
   loadUsersData() {
-    this.dataService.getBackofficeUsers().subscribe((users: User[]) => {
-      this.users = users;
-      this.filteredUsers = users;
+    this.dataService.getCustomers().subscribe((users: User[]) => {
+      // Filter to only show London Podiatry Centre users
+      const londonUsers = users.filter((user: User) => user.organisation === 'London Podiatry Centre');
+      this.users = londonUsers;
+      this.filteredUsers = londonUsers;
     });
   }
 
@@ -58,10 +60,9 @@ export class MedicalCenterComponent implements OnInit {
                            user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            user.organisation.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesOrganisation = !this.organisationFilter || user.organisation === this.organisationFilter;
       const matchesRole = !this.roleFilter || user.role === this.roleFilter;
       const matchesStatus = !this.statusFilter || user.status === this.statusFilter;
-      return matchesSearch && matchesOrganisation && matchesRole && matchesStatus;
+      return matchesSearch && matchesRole && matchesStatus;
     });
   }
 
@@ -79,7 +80,8 @@ export class MedicalCenterComponent implements OnInit {
   }
 
   getUniqueOrganisations(): string[] {
-    return [...new Set(this.users.map(user => user.organisation))].sort();
+    // No longer needed since we removed organization filter
+    return [];
   }
 
   getUniqueRoles(): string[] {
