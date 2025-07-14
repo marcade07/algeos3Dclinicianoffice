@@ -20,6 +20,5 @@ export const routes: Routes = [
   { path: 'customers', redirectTo: '/business-partners', pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
   { path: 'orders', component: OrdersComponent },
-  { path: 'data-export', component: DataExportComponent },
   { path: 'settings', component: SettingsComponent }
 ];
