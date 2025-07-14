@@ -230,6 +230,14 @@ export class MedicalCenterComponent implements OnInit {
         { key: 'organisation', header: 'Organisation' },
         { key: 'firstName', header: 'First Name' },
         { key: 'lastName', header: 'Last Name' },
+        { key: 'email', header: 'Email' },
+        { key: 'role', header: 'Role' },
+        { key: 'status', header: 'Status' }
+      ]);
+      this.downloadCSV(csvData, 'backoffice-users');
+    });
+  }
+
   // Export Confections
   exportConfections() {
     console.log('Exporting Confections...');
@@ -291,7 +299,7 @@ export class MedicalCenterComponent implements OnInit {
       });
     });
   }
-        { key: 'email', header: 'Email' },
+
   // Export Customers
   exportBusinessPartners() {
     console.log('Exporting Business Partners...');
@@ -310,7 +318,7 @@ export class MedicalCenterComponent implements OnInit {
       this.downloadCSV(csvData, 'business-partners');
     });
   }
-        { key: 'role', header: 'Role' },
+
   // Export Orders
   exportOrders() {
     console.log('Exporting Orders...');
@@ -328,7 +336,7 @@ export class MedicalCenterComponent implements OnInit {
       this.downloadCSV(csvData, 'orders');
     });
   }
-        { key: 'status', header: 'Status' }
+
   // Export Invoices
   exportInvoices() {
     console.log('Exporting Invoices...');
@@ -343,14 +351,14 @@ export class MedicalCenterComponent implements OnInit {
       this.downloadCSV(csvData, 'invoices');
     });
   }
-      ]);
+
   // Helper method to convert data to CSV format
   private convertToCSV(data: any[], columns: { key: string, header: string }[]): string {
     if (!data || data.length === 0) {
       // Return just headers if no data
       return columns.map(col => col.header).join(',');
     }
-      this.downloadCSV(csvData, 'backoffice-users');
+    
     // Create header row
     const headers = columns.map(col => col.header).join(',');
     
@@ -369,10 +377,10 @@ export class MedicalCenterComponent implements OnInit {
         return stringValue;
       }).join(',');
     });
-    });
+    
     return [headers, ...rows].join('\n');
   }
-  }
+
   // Helper method to download CSV file
   private downloadCSV(csvContent: string, filename: string) {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
