@@ -3,9 +3,25 @@
     <h5>{{ currentUser.name }}</h5>
   </div>
   <nav class="nav flex-column">
-    <a class="nav-link" routerLink="/users" routerLinkActive="active">
-      <span>Users</span>
-    </a>
+    <!-- Medical Center Expandable Section -->
+    <div class="nav-section">
+      <button class="nav-section-header" (click)="toggleMedicalCenter()">
+        <span class="section-title">Medical Center</span>
+        <i class="bi chevron-icon" 
+           [class.bi-chevron-down]="!isMedicalCenterExpanded"
+           [class.bi-chevron-up]="isMedicalCenterExpanded"></i>
+      </button>
+      <div class="nav-subsection" [class.expanded]="isMedicalCenterExpanded">
+        <a class="nav-link nav-sublink" routerLink="/users" routerLinkActive="active">
+          <span>Users</span>
+        </a>
+        <a class="nav-link nav-sublink" routerLink="/invoices" routerLinkActive="active">
+          <span>Invoices</span>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Regular Navigation Items -->
     <a class="nav-link" routerLink="/patients" routerLinkActive="active">
       <span>Patients</span>
     </a>
@@ -17,9 +33,6 @@
     </a>
     <a class="nav-link" routerLink="/orders" routerLinkActive="active">
       <span>Orders</span>
-    </a>
-    <a class="nav-link" routerLink="/invoices" routerLinkActive="active">
-      <span>Invoices</span>
     </a>
     <a class="nav-link" routerLink="/data-export" routerLinkActive="active">
       <span>Export</span>
