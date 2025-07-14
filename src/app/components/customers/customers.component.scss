@@ -1,0 +1,23 @@
+// Customers component styles are handled in the global _components.scss file
+// This ensures consistent styling across the application
+
+// Sortable header styling
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--bs-gray-300) !important;
+  }
+  
+  .sort-icon {
+    font-size: 0.75rem;
+    color: var(--bs-gray-600);
+    transition: all 0.2s ease;
+  }
+  
+  &:hover .sort-icon {
+    color: var(--primary-black);
+  }
+}

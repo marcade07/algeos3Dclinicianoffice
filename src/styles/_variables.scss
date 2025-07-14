@@ -1,0 +1,80 @@
+// Custom color palette variables
+:root {
+  // Primary color palette
+  --primary-color: #14adbd;
+  --secondary-color: #7cc9db;
+  --accent-color: #037b9d;
+  
+  // Text colors
+  --text-primary: #384d59;
+  --text-secondary: #7a8c92;
+  --text-muted: #7a8c92;
+  
+  // Background colors
+  --bg-main: #f8f8f9;
+  --bg-alternate: #e1e2d0;
+  --bg-card: #f1f1f3;
+  --bg-surface-2: #bbc1c4;
+  --bg-surface-3: #dcdee1;
+  
+  // Utility colors
+  --color-beige: #c4aa9d;
+  --color-highlight: #e0ed16;
+  --color-warning: #e0ed16;
+  --color-info: #85a8a5;
+  --color-border: #9aa5aa;
+  --color-disabled: #9aa5aa;
+  
+  // Legacy compatibility (keeping for Bootstrap overrides)
+  --primary-black: #384d59;
+  --primary-white: #ffffff;
+  
+  // Spacing system (8px base)
+  --spacing-base: 8px;
+  --spacing-1: calc(var(--spacing-base) * 1);
+  --spacing-2: calc(var(--spacing-base) * 2);
+  --spacing-3: calc(var(--spacing-base) * 3);
+  --spacing-4: calc(var(--spacing-base) * 4);
+  --spacing-5: calc(var(--spacing-base) * 5);
+  --spacing-6: calc(var(--spacing-base) * 6);
+  --spacing-8: calc(var(--spacing-base) * 8);
+  
+  // Border radius
+  --border-radius-base: 8px;
+  
+  // Sidebar
+  --sidebar-width: 6rem;
+  --sidebar-bg: var(--text-primary);
+  --sidebar-text: var(--primary-white);
+  
+  // Transitions
+  --transition-base: all 0.3s ease;
+}
+
+// Bootstrap variable overrides
+$primary: #14adbd;
+$secondary: #7cc9db;
+$success: #85a8a5;
+$info: #85a8a5;
+$warning: #e0ed16;
+$danger: #037b9d;
+$light: #f1f1f3;
+$dark: #384d59;
+
+$body-bg: #f8f8f9;
+$body-color: #384d59;
+
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$border-radius-lg: 12px;
+
+// Gray scale using new palette
+$gray-100: #f1f1f3;
+$gray-200: #dcdee1;
+$gray-300: #bbc1c4;
+$gray-400: #9aa5aa;
+$gray-500: #7a8c92;
+$gray-600: #7a8c92;
+$gray-700: #384d59;
+$gray-800: #384d59;
+$gray-900: #384d59;
