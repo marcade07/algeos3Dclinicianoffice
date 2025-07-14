@@ -1,0 +1,85 @@
+// Medical Center component styles with tab navigation
+
+// Tab navigation styles (reused from Products component)
+.tab-navigation {
+  margin-bottom: var(--spacing-3);
+  
+  .nav-tabs {
+    border-bottom: 2px solid var(--bs-gray-200);
+    background: var(--primary-white);
+    border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
+    padding: 0 var(--spacing-2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    .nav-link {
+      background: none;
+      border: none;
+      color: var(--bs-gray-600);
+      padding: var(--spacing-2) var(--spacing-3);
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition-base);
+      border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
+      margin-bottom: -2px;
+      position: relative;
+      
+      &:hover:not(.active) {
+        color: var(--primary-black);
+        background-color: var(--bs-gray-100);
+      }
+      
+      &.active {
+        color: var(--primary-black);
+        background-color: var(--primary-white);
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary-black);
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background-color: var(--primary-black);
+        }
+      }
+    }
+  }
+}
+
+// Tab content styles
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Ensure consistent spacing for control bar and data table
+.control-bar {
+  margin-bottom: var(--spacing-3);
+}
+
+// Responsive design for tabs
+@media (max-width: 768px) {
+  .tab-navigation {
+    .nav-tabs {
+      padding: 0 var(--spacing-1);
+      
+      .nav-link {
+        padding: var(--spacing-1) var(--spacing-2);
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

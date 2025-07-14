@@ -1,0 +1,196 @@
+<div class="page-header">
+  <h1>Medical Center</h1>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-navigation">
+  <nav class="nav nav-tabs">
+    <button 
+      class="nav-link" 
+      [class.active]="activeTab === 'users'"
+      (click)="setActiveTab('users')">
+      Users
+    </button>
+    <button 
+      class="nav-link" 
+      [class.active]="activeTab === 'invoices'"
+      (click)="setActiveTab('invoices')">
+      Invoices
+    </button>
+  </nav>
+</div>
+
+<!-- Users Tab Content -->
+<div *ngIf="activeTab === 'users'" class="tab-content">
+  <div class="control-bar">
+    <div class="row align-items-center">
+      <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Search users..." [(ngModel)]="searchTerm" (ngModelChange)="filterUsers()">
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="organisationFilter" (ngModelChange)="filterUsers()">
+          <option value="">All Organisations</option>
+          <option *ngFor="let organisation of getUniqueOrganisations()" [value]="organisation">{{ organisation }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="roleFilter" (ngModelChange)="filterUsers()">
+          <option value="">All Roles</option>
+          <option *ngFor="let role of getUniqueRoles()" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="statusFilter" (ngModelChange)="filterUsers()">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Desactivated">Desactivated</option>
+        </select>
+      </div>
+      <div class="col-md-3 text-end">
+        <button class="btn btn-outline-dark me-2">
+          <i class="bi bi-download me-1"></i>Export
+        </button>
+        <button class="btn btn-dark">
+          <i class="bi bi-plus me-1"></i>Add New User
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-table">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Organisation</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers">
+            <td>{{ user.organisation }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ getRoleDisplayName(user.role) }}</td>
+            <td>
+              <span class="badge" [class]="user.status === 'Active' ? 'bg-success' : 'bg-secondary'">
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="action-buttons">
+              <button 
+                class="btn btn-sm" 
+                [class]="user.status === 'Active' ? 'btn-outline-warning' : 'btn-outline-success'"
+                [title]="user.status === 'Active' ? 'Deactivate' : 'Activate'"
+                (click)="toggleUserStatus(user)">
+                <i class="bi" [class]="user.status === 'Active' ? 'bi-person-x' : 'bi-person-check'"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark" title="Reset Password" (click)="resetPassword(user)">
+                <i class="bi bi-key"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark" title="View Profile" (click)="viewProfile(user)">
+                <i class="bi bi-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Invoices Tab Content -->
+<div *ngIf="activeTab === 'invoices'" class="tab-content">
+  <div class="control-bar">
+    <div class="row align-items-center mb-3">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search invoices..." [(ngModel)]="invoicesSearchTerm" (ngModelChange)="filterInvoices()">
+      </div>
+      <div class="col-md-8 text-end">
+        <button class="btn btn-outline-dark">
+          <i class="bi bi-download me-1"></i>Export
+        </button>
+      </div>
+    </div>
+    
+    <!-- Date Range Filter Row -->
+    <div class="row align-items-center">
+      <div class="col-md-2">
+        <label class="form-label mb-1">From Date:</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          [value]="getDateInputValue(startDate)"
+          (change)="onStartDateChange($event)"
+          placeholder="DD/MM/YYYY">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label mb-1">To Date:</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          [value]="getDateInputValue(endDate)"
+          (change)="onEndDateChange($event)"
+          placeholder="DD/MM/YYYY">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label mb-1">&nbsp;</label>
+        <button 
+          class="btn btn-outline-secondary w-100" 
+          (click)="clearDateFilters()"
+          title="Clear date filters">
+          <i class="bi bi-x-circle me-1"></i>Clear Dates
+        </button>
+      </div>
+      <div class="col-md-6">
+        <!-- Display selected date range in DD/MM/YYYY format -->
+        <div class="mt-2" *ngIf="startDate || endDate">
+          <small class="text-muted">
+            <i class="bi bi-calendar3 me-1"></i>
+            <span *ngIf="startDate && endDate">{{ startDate }} to {{ endDate }}</span>
+            <span *ngIf="startDate && !endDate">From {{ startDate }}</span>
+            <span *ngIf="!startDate && endDate">Until {{ endDate }}</span>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-table">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date Issued</th>
+            <th>Business Partner</th>
+            <th>Amount (incl. VAT)</th>
+            <th>Invoiced to</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let invoice of filteredInvoices">
+            <td>{{ formatDateToEuropean(invoice.dateIssued) }}</td>
+            <td>{{ invoice.businessPartner }}</td>
+            <td>£{{ invoice.amount.toFixed(2) }}</td>
+            <td>{{ invoice.invoicedTo }}</td>
+            <td class="action-buttons">
+              <button class="btn btn-sm btn-outline-dark" title="View">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark" title="Download PDF">
+                <i class="bi bi-file-pdf"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
