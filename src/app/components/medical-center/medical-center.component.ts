@@ -18,7 +18,6 @@ export class MedicalCenterComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchTerm: string = '';
-  organisationFilter: string = '';
   roleFilter: string = '';
   statusFilter: string = '';
   
@@ -58,8 +57,7 @@ export class MedicalCenterComponent implements OnInit {
     this.filteredUsers = this.users.filter(user => {
       const matchesSearch = user.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                           user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                           user.organisation.toLowerCase().includes(this.searchTerm.toLowerCase());
+                           user.email.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchesRole = !this.roleFilter || user.role === this.roleFilter;
       const matchesStatus = !this.statusFilter || user.status === this.statusFilter;
       return matchesSearch && matchesRole && matchesStatus;
@@ -77,11 +75,6 @@ export class MedicalCenterComponent implements OnInit {
 
   viewProfile(user: User) {
     console.log(`Viewing profile for ${user.firstName} ${user.lastName}`);
-  }
-
-  getUniqueOrganisations(): string[] {
-    // No longer needed since we removed organization filter
-    return [];
   }
 
   getUniqueRoles(): string[] {
