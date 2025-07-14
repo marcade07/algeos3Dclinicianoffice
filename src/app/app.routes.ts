@@ -10,11 +10,10 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { PatientsComponent } from './components/patients/patients.component';
 import { ConfectionsComponent } from './components/confections/confections.component';
 import { CustomersComponent } from './components/customers/customers.component';
-import { MedicalCenterComponent } from './components/medical-center/medical-center.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/medical-center', pathMatch: 'full' },
-  { path: 'medical-center', component: MedicalCenterComponent },
+  { path: '', redirectTo: '/users', pathMatch: 'full' },
+  { path: 'users', component: UsersComponent },
   { path: 'patients', component: PatientsComponent },
   { path: 'prescriptions', component: ConfectionsComponent },
   { path: 'confections', redirectTo: '/prescriptions', pathMatch: 'full' },
@@ -22,6 +21,8 @@ export const routes: Routes = [
   { path: 'customers', redirectTo: '/business-partners', pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
   { path: 'orders', component: OrdersComponent },
+  { path: 'invoices', component: InvoicesComponent },
+  { path: 'finances', redirectTo: '/invoices', pathMatch: 'full' },
   { path: 'couriers', component: CarriersComponent },
   { path: 'carriers', redirectTo: '/couriers', pathMatch: 'full' },
   { path: 'data-export', component: DataExportComponent },
