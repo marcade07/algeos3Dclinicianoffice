@@ -225,7 +225,7 @@ export class MedicalCenterComponent implements OnInit {
   // Export Backoffice Users
   exportBackofficeUsers() {
     console.log('Exporting Backoffice Users...');
-    this.dataService.getBackofficeUsers().subscribe(users => {
+    this.dataService.getBackofficeUsers().subscribe((users: User[]) => {
       const csvData = this.convertToCSV(users, [
         { key: 'organisation', header: 'Organisation' },
         { key: 'firstName', header: 'First Name' },
@@ -242,7 +242,7 @@ export class MedicalCenterComponent implements OnInit {
   exportConfections() {
     console.log('Exporting Confections...');
     // Get all patients first to build confections data
-    this.dataService.getPatients().subscribe(patients => {
+    this.dataService.getPatients().subscribe((patients: any[]) => {
       const allConfections: any[] = [];
       
       // Process each patient to get their confections
@@ -264,9 +264,9 @@ export class MedicalCenterComponent implements OnInit {
         return;
       }
       
-      patients.forEach(patient => {
-        this.dataService.getConfectionsByPatientId(patient.id).subscribe(confections => {
-          confections.forEach(confection => {
+      patients.forEach((patient: any) => {
+        this.dataService.getConfectionsByPatientId(patient.id).subscribe((confections: any[]) => {
+          confections.forEach((confection: any) => {
             allConfections.push({
               confectionId: confection.confectionId,
               patientFirstName: patient.firstName,
@@ -303,7 +303,7 @@ export class MedicalCenterComponent implements OnInit {
   // Export Customers
   exportBusinessPartners() {
     console.log('Exporting Business Partners...');
-    this.dataService.getCustomers().subscribe(customers => {
+    this.dataService.getCustomers().subscribe((customers: User[]) => {
       const csvData = this.convertToCSV(customers, [
         { key: 'organisation', header: 'Organisation' },
         { key: 'title', header: 'Title' },
@@ -322,7 +322,7 @@ export class MedicalCenterComponent implements OnInit {
   // Export Orders
   exportOrders() {
     console.log('Exporting Orders...');
-    this.dataService.getOrders().subscribe(orders => {
+    this.dataService.getOrders().subscribe((orders: any[]) => {
       const csvData = this.convertToCSV(orders, [
         { key: 'orderNumber', header: 'Order Number' },
         { key: 'businessPartner', header: 'Business Partner' },
@@ -340,7 +340,7 @@ export class MedicalCenterComponent implements OnInit {
   // Export Invoices
   exportInvoices() {
     console.log('Exporting Invoices...');
-    this.dataService.getInvoices().subscribe(invoices => {
+    this.dataService.getInvoices().subscribe((invoices: Invoice[]) => {
       const csvData = this.convertToCSV(invoices, [
         { key: 'id', header: 'Invoice ID' },
         { key: 'dateIssued', header: 'Date Issued' },
@@ -352,6 +352,34 @@ export class MedicalCenterComponent implements OnInit {
     });
   }
 
+  // Helper method to convert data to CSV format
+  private convertToCSV(data: any[], columns: { key: string, header: string }[]): string {
+    if (!data || data.length === 0) {
+      // Return just headers if no data
+      return columns.map((col: { key: string, header: string }) => col.header).join(',');
+    }
+    
+    // Create header row
+    const headers = columns.map((col: { key: string, header: string }) => col.header).join(',');
+    
+    // Create data rows
+    const rows = data.map((item: any) => {
+      return columns.map((col: { key: string, header: string }) => {
+        const value = item[col.key];
+        // Handle values that might contain commas or quotes
+        if (value === null || value === undefined) {
+          return '';
+        }
+        const stringValue = String(value);
+        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+          return `"${stringValue.replace(/"/g, '""')}"`;
+        }
+        return stringValue;
+      }).join(',');
+    });
+    
+    return [headers, ...rows].join('\n');
+  }
   // Helper method to convert data to CSV format
   private convertToCSV(data: any[], columns: { key: string, header: string }[]): string {
     if (!data || data.length === 0) {
@@ -381,6 +409,29 @@ export class MedicalCenterComponent implements OnInit {
     return [headers, ...rows].join('\n');
   }
 
+  // Helper method to download CSV file
+  private downloadCSV(csvContent: string, filename: string) {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${filename}-${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log(`Successfully exported ${filename} data as CSV`);
+      
+      // Show success message to user
+      alert(`${filename.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())} data has been exported successfully!`);
+    } else {
+      console.error('Download not supported in this browser');
+      alert('Download not supported in this browser');
+    }
+  }
   // Helper method to download CSV file
   private downloadCSV(csvContent: string, filename: string) {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
