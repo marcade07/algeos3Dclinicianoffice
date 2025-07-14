@@ -42,7 +42,6 @@ export class PatientsComponent implements OnInit {
   patients: Patient[] = [];
   filteredPatients: Patient[] = [];
   searchTerm: string = '';
-  businessPartnerFilter: string = '';
   expandedPatientId: number | null = null;
   patientConfections: { [key: number]: Confection[] } = {};
   
@@ -99,8 +98,9 @@ export class PatientsComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getPatients().subscribe(patients => {
-      this.patients = patients;
-      this.filteredPatients = patients;
+      // Filter to only show London Podiatry Centre patients
+      this.patients = patients.filter(patient => patient.businessPartner === 'London Podiatry Centre');
+      this.filteredPatients = this.patients;
     });
   }
 
@@ -109,13 +109,8 @@ export class PatientsComponent implements OnInit {
       const matchesSearch = patient.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            patient.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            patient.patientId.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesBusinessPartner = !this.businessPartnerFilter || patient.businessPartner === this.businessPartnerFilter;
-      return matchesSearch && matchesBusinessPartner;
+      return matchesSearch;
     });
-  }
-
-  getUniqueBusinessPartners(): string[] {
-    return [...new Set(this.patients.map(patient => patient.businessPartner))].sort();
   }
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY - REQUIRED METHOD
