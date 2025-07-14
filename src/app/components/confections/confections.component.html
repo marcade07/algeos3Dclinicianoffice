@@ -8,12 +8,6 @@
       <input type="text" class="form-control" placeholder="Search by Prescription ID or Patient Name..." [(ngModel)]="searchTerm" (ngModelChange)="filterConfections()">
     </div>
     <div class="col-md-3">
-      <select class="form-select" [(ngModel)]="businessPartnerFilter" (ngModelChange)="filterConfections()">
-        <option value="">All Business Partners</option>
-        <option *ngFor="let businessPartner of getUniqueBusinessPartners()" [value]="businessPartner">{{ businessPartner }}</option>
-      </select>
-    </div>
-    <div class="col-md-3">
       <select class="form-select" [(ngModel)]="statusFilter" (ngModelChange)="filterConfections()">
         <option value="">All Status</option>
         <option value="Draft">Draft</option>
@@ -22,7 +16,7 @@
         <option value="Received">Received</option>
       </select>
     </div>
-    <div class="col-md-2 text-end">
+    <div class="col-md-5 text-end">
       <button class="btn btn-outline-dark" (click)="clearFilters()">
         <i class="bi bi-x-circle me-1"></i>Clear
       </button>
@@ -38,7 +32,6 @@
           <th>Date Created</th>
           <th>Prescription ID</th>
           <th>Patient</th>
-          <th>Business Partner</th>
           <th>Status</th>
           <th>Order Number</th>
           <th>Actions</th>
@@ -49,7 +42,6 @@
           <td>{{ formatDateToEuropean(confection.dateCreated) }}</td>
           <td class="monospace">{{ confection.confectionId }}</td>
           <td>{{ confection.patientFirstName }} {{ confection.patientLastName }}</td>
-          <td>{{ confection.businessPartner }}</td>
           <td>
             <span class="badge" [class]="getStatusBadgeClass(confection.status)">
               {{ confection.status }}

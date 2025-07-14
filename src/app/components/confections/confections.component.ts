@@ -27,7 +27,6 @@ export class ConfectionsComponent implements OnInit {
   confections: ConfectionData[] = [];
   filteredConfections: ConfectionData[] = [];
   searchTerm: string = '';
-  businessPartnerFilter: string = '';
   statusFilter: string = '';
   
   // Prescription modal properties - identical to Patients page
@@ -389,10 +388,9 @@ export class ConfectionsComponent implements OnInit {
                            confection.patientLastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                            `${confection.patientFirstName} ${confection.patientLastName}`.toLowerCase().includes(this.searchTerm.toLowerCase());
       
-      const matchesBusinessPartner = !this.businessPartnerFilter || confection.businessPartner === this.businessPartnerFilter;
       const matchesStatus = !this.statusFilter || confection.status === this.statusFilter;
       
-      return matchesSearch && matchesBusinessPartner && matchesStatus;
+      return matchesSearch && matchesStatus;
     });
     
     // Apply sorting to filtered results
@@ -401,14 +399,10 @@ export class ConfectionsComponent implements OnInit {
 
   clearFilters() {
     this.searchTerm = '';
-    this.businessPartnerFilter = '';
     this.statusFilter = '';
     this.filteredConfections = this.sortConfectionsByDateDescending(this.confections);
   }
 
-  getUniqueBusinessPartners(): string[] {
-    return [...new Set(this.confections.map(confection => confection.businessPartner))].sort();
-  }
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY  
   formatDateToEuropean(dateString: string): string {
