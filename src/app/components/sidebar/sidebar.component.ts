@@ -11,7 +11,7 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class SidebarComponent {
   currentUser = {
-    name: 'Sarah Johnson'
+    name: 'Robert Thompson'
   };
 
   constructor(private router: Router) {}
