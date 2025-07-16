@@ -9,6 +9,7 @@ import { PatientsComponent } from './components/patients/patients.component';
 import { ConfectionsComponent } from './components/confections/confections.component';
 import { CustomersComponent } from './components/customers/customers.component';
 import { MedicalCenterComponent } from './components/medical-center/medical-center.component';
+import { CartComponent } from './components/cart/cart.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/medical-center', pathMatch: 'full' },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'customers', redirectTo: '/business-partners', pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
   { path: 'orders', component: OrdersComponent },
-  { path: 'settings', component: SettingsComponent }
+  { path: 'settings', component: SettingsComponent },
+  { path: 'cart', component: CartComponent }
 ];

@@ -1,0 +1,308 @@
+<!-- Page Header -->
+<div class="page-header">
+  <h1>Cart</h1>
+</div>
+
+<!-- Main Content -->
+<div class="cart-layout">
+  <!-- Left Column - Main Content -->
+  <div class="cart-main-content">
+    <!-- Pending Prescriptions Table -->
+    <div class="cart-section">
+      <div class="section-header">
+        <h2><i class="bi bi-file-medical me-2"></i>Pending Prescriptions</h2>
+        <p class="section-subtitle">All pending prescriptions added by practitioners</p>
+      </div>
+
+      <div class="data-table" *ngIf="pendingPrescriptions.length > 0; else emptyCart">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Prescription Number</th>
+                <th>Prescribed by</th>
+                <th>Patient</th>
+                <th>Created on</th>
+                <th class="text-center">Top Covers</th>
+                <th class="text-center">Pair of Insoles</th>
+                <th>Price (£)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prescription of pendingPrescriptions" class="prescription-row">
+                <td class="monospace">{{ prescription.prescriptionNumber }}</td>
+                <td>{{ prescription.prescribedBy }}</td>
+                <td>{{ prescription.patient }}</td>
+                <td>{{ formatDateToEuropean(prescription.createdOn) }}</td>
+                <td class="text-center">{{ prescription.topCovers }}</td>
+                <td class="text-center">{{ prescription.pairOfInsoles }}</td>
+                <td>£{{ prescription.price.toFixed(2) }}</td>
+                <td class="action-buttons">
+                  <button class="btn btn-sm btn-outline-dark" title="View Prescription" (click)="viewPrescription(prescription)">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" title="Remove from Cart" (click)="removePrescription(prescription)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty Cart State -->
+      <ng-template #emptyCart>
+        <div class="empty-cart">
+          <i class="bi bi-file-earmark-text empty-icon"></i>
+          <h4>No pending prescriptions</h4>
+          <p class="text-muted">Add prescriptions to your cart to continue with your order.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Order Configuration Section -->
+    <div class="cart-section" *ngIf="pendingPrescriptions.length > 0">
+      <div class="section-header">
+        <h2><i class="bi bi-gear me-2"></i>Order Configuration</h2>
+      </div>
+
+      <div class="configuration-grid">
+        <!-- Delivery Address -->
+        <div class="config-item">
+          <h4><i class="bi bi-geo-alt me-2"></i>Delivery Address</h4>
+          <select class="form-select" [(ngModel)]="selectedDeliveryAddress">
+            <option *ngFor="let address of deliveryAddresses" [value]="address.id">
+              {{ address.name }} - {{ address.address }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Billing Address -->
+        <div class="config-item">
+          <h4><i class="bi bi-file-text me-2"></i>Billing Address</h4>
+          <select class="form-select" [(ngModel)]="selectedBillingAddress">
+            <option *ngFor="let address of billingAddresses" [value]="address.id">
+              {{ address.name }} - {{ address.address }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Delivery Mode -->
+        <div class="config-item">
+          <h4><i class="bi bi-truck me-2"></i>Delivery Mode</h4>
+          <div class="delivery-options">
+            <div class="form-check" *ngFor="let mode of deliveryModes">
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                [id]="'delivery-' + mode.id"
+                [value]="mode.id"
+                [(ngModel)]="selectedDeliveryMode">
+              <label class="form-check-label" [for]="'delivery-' + mode.id">
+                <strong>{{ mode.name }}:</strong> {{ mode.description }}, £{{ mode.price.toFixed(2) }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="config-item">
+          <h4><i class="bi bi-credit-card me-2"></i>Payment Method</h4>
+          <div class="payment-options">
+            <div class="form-check">
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                id="payment-credit-card"
+                value="credit-card"
+                [(ngModel)]="selectedPaymentMethod">
+              <label class="form-check-label" for="payment-credit-card">
+                <strong>Credit Card:</strong> Credit card processing
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column - Order Summary -->
+  <div class="cart-sidebar" *ngIf="pendingPrescriptions.length > 0">
+    <div class="order-summary">
+      <h3><i class="bi bi-receipt me-2"></i>Order Summary</h3>
+      
+      <div class="summary-items">
+        <div class="summary-item">
+          <span class="summary-label">Total Pairs of Insoles:</span>
+          <span class="summary-value">{{ getTotalPairsOfInsoles() }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Total Top Covers:</span>
+          <span class="summary-value">{{ getTotalTopCovers() }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Subtotal:</span>
+          <span class="summary-value">£{{ getSubtotal().toFixed(2) }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Shipping:</span>
+          <span class="summary-value">£{{ getShippingCost().toFixed(2) }}</span>
+        </div>
+        <div class="summary-item total-item">
+          <span class="summary-label">Total:</span>
+          <span class="summary-value">£{{ getTotal().toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div class="payment-section">
+        <button 
+          class="btn btn-dark btn-lg w-100" 
+          [disabled]="!isFormValid()"
+          (click)="openStripeModal()">
+          <i class="bi bi-credit-card me-2"></i>Pay
+        </button>
+        <small class="form-text text-muted mt-2 d-block text-center">
+          {{ getValidationStatus() }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stripe Payment Modal -->
+<div class="modal-overlay" *ngIf="showStripeModal" (click)="closeStripeModal()">
+  <div class="stripe-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="bi bi-credit-card me-2"></i>Payment Details</h3>
+      <button class="btn-close" (click)="closeStripeModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Payment Form -->
+      <div class="payment-form">
+        <div class="form-group">
+          <label class="form-label">Cardholder Name</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="stripeForm.cardholderName"
+            placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Card Number</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [value]="stripeForm.cardNumber"
+            (input)="formatCardNumber($event)"
+            placeholder="1234 5678 9012 3456"
+            maxlength="19">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Expiry Date</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [value]="stripeForm.expiryDate"
+              (input)="formatExpiryDate($event)"
+              placeholder="MM/YY"
+              maxlength="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CVV</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="stripeForm.cvv"
+              placeholder="123"
+              maxlength="3">
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Recap -->
+      <div class="order-recap">
+        <h4>Order Summary</h4>
+        <div class="recap-items">
+          <div class="recap-item">
+            <span>Subtotal:</span>
+            <span>£{{ getSubtotal().toFixed(2) }}</span>
+          </div>
+          <div class="recap-item">
+            <span>Shipping:</span>
+            <span>£{{ getShippingCost().toFixed(2) }}</span>
+          </div>
+          <div class="recap-item total">
+            <span>Total:</span>
+            <span>£{{ getTotal().toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary" (click)="closeStripeModal()">
+        <i class="bi bi-x-circle me-2"></i>Cancel
+      </button>
+      <button 
+        class="btn btn-success" 
+        [disabled]="!isStripeFormValid()"
+        (click)="processPayment()">
+        <i class="bi bi-check-circle me-2"></i>Complete Payment
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Success Modal -->
+<div class="modal-overlay" *ngIf="showSuccessModal" (click)="closeSuccessModal()">
+  <div class="success-modal" (click)="$event.stopPropagation()">
+    <div class="modal-body">
+      <div class="success-content">
+        <div class="success-icon">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h2>Payment Successful</h2>
+        <p>Your order has been placed successfully</p>
+
+        <div class="order-summary-box">
+          <h4>Order Details</h4>
+          <div class="order-details">
+            <div class="detail-item">
+              <span class="label">Order Reference:</span>
+              <span class="value monospace">{{ orderReference }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Total Prescriptions:</span>
+              <span class="value">{{ pendingPrescriptions.length }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Total Amount:</span>
+              <span class="value">£{{ getTotal().toFixed(2) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Payment Method:</span>
+              <span class="value">Credit Card</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline-dark" (click)="downloadInvoice()">
+        <i class="bi bi-download me-2"></i>Download Invoice
+      </button>
+      <button class="btn btn-primary" (click)="viewOrders()">
+        <i class="bi bi-list-ul me-2"></i>View Orders
+      </button>
+    </div>
+  </div>
+</div>
