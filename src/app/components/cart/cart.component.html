@@ -68,59 +68,86 @@
         <h2><i class="bi bi-gear me-2"></i>Order Configuration</h2>
       </div>
 
-      <div class="configuration-grid">
-        <!-- Delivery Address -->
-        <div class="config-item">
-          <h4><i class="bi bi-geo-alt me-2"></i>Delivery Address</h4>
-          <select class="form-select" [(ngModel)]="selectedDeliveryAddress">
-            <option *ngFor="let address of deliveryAddresses" [value]="address.id">
-              {{ address.name }} - {{ address.address }}
-            </option>
-          </select>
+      <div class="configuration-cards">
+        <!-- Delivery Address Card -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <h4><i class="bi bi-geo-alt me-2"></i>Delivery Address</h4>
+          </div>
+          <div class="config-card-body">
+            <select class="form-select" [(ngModel)]="selectedDeliveryAddress">
+              <option *ngFor="let address of deliveryAddresses" [value]="address.id">
+                {{ address.name }} - {{ address.address }}
+              </option>
+            </select>
+          </div>
         </div>
 
-        <!-- Billing Address -->
-        <div class="config-item">
-          <h4><i class="bi bi-file-text me-2"></i>Billing Address</h4>
-          <select class="form-select" [(ngModel)]="selectedBillingAddress">
-            <option *ngFor="let address of billingAddresses" [value]="address.id">
-              {{ address.name }} - {{ address.address }}
-            </option>
-          </select>
+        <!-- Billing Address Card -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <h4><i class="bi bi-file-text me-2"></i>Billing Address</h4>
+          </div>
+          <div class="config-card-body">
+            <select class="form-select" [(ngModel)]="selectedBillingAddress">
+              <option *ngFor="let address of billingAddresses" [value]="address.id">
+                {{ address.name }} - {{ address.address }}
+              </option>
+            </select>
+          </div>
         </div>
 
-        <!-- Delivery Mode -->
-        <div class="config-item">
-          <h4><i class="bi bi-truck me-2"></i>Delivery Mode</h4>
-          <div class="delivery-options">
-            <div class="form-check" *ngFor="let mode of deliveryModes">
-              <input 
-                class="form-check-input" 
-                type="radio" 
-                [id]="'delivery-' + mode.id"
-                [value]="mode.id"
-                [(ngModel)]="selectedDeliveryMode">
-              <label class="form-check-label" [for]="'delivery-' + mode.id">
-                <strong>{{ mode.name }}:</strong> {{ mode.description }}, £{{ mode.price.toFixed(2) }}
-              </label>
+        <!-- Delivery Mode Card -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <h4><i class="bi bi-truck me-2"></i>Delivery Mode</h4>
+          </div>
+          <div class="config-card-body">
+            <div class="delivery-options">
+              <div class="form-check" *ngFor="let mode of deliveryModes">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  [id]="'delivery-' + mode.id"
+                  [value]="mode.id"
+                  [(ngModel)]="selectedDeliveryMode">
+                <label class="form-check-label" [for]="'delivery-' + mode.id">
+                  <strong>{{ mode.name }}:</strong> {{ mode.description }}, £{{ mode.price.toFixed(2) }}
+                </label>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Payment Method -->
-        <div class="config-item">
-          <h4><i class="bi bi-credit-card me-2"></i>Payment Method</h4>
-          <div class="payment-options">
-            <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="radio" 
-                id="payment-credit-card"
-                value="credit-card"
-                [(ngModel)]="selectedPaymentMethod">
-              <label class="form-check-label" for="payment-credit-card">
-                <strong>Credit Card:</strong> Credit card processing
-              </label>
+        <!-- Payment Method Card -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <h4><i class="bi bi-credit-card me-2"></i>Payment Method</h4>
+          </div>
+          <div class="config-card-body">
+            <div class="payment-options">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  id="payment-card"
+                  value="card"
+                  [(ngModel)]="selectedPaymentMethod">
+                <label class="form-check-label" for="payment-card">
+                  <strong>Card:</strong> Credit card processing
+                </label>
+              </div>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  id="payment-invoice"
+                  value="invoice"
+                  [(ngModel)]="selectedPaymentMethod">
+                <label class="form-check-label" for="payment-invoice">
+                  <strong>Invoice (Net 30):</strong> Pay within 30 days of invoice
+                </label>
+              </div>
             </div>
           </div>
         </div>

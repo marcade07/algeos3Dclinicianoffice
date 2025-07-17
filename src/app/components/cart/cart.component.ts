@@ -135,7 +135,7 @@ export class CartComponent implements OnInit {
   selectedDeliveryAddress: string = '';
   selectedBillingAddress: string = '';
   selectedDeliveryMode: string = 'normal';
-  selectedPaymentMethod: string = 'credit-card';
+  selectedPaymentMethod: string = 'card';
 
   // Modal states
   showStripeModal: boolean = false;
