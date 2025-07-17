@@ -158,6 +158,46 @@ export class CartComponent implements OnInit {
     // Set default selections
     this.selectedDeliveryAddress = this.deliveryAddresses[0].id;
     this.selectedBillingAddress = this.billingAddresses[0].id;
+    
+    // Load some mock pending prescriptions for demonstration
+    this.loadMockPendingPrescriptions();
+  }
+
+  // Load mock data for pending prescriptions
+  loadMockPendingPrescriptions() {
+    // Add some sample pending prescriptions
+    this.pendingPrescriptions = [
+      {
+        id: 1,
+        prescriptionNumber: 'CNF-2024-007',
+        prescribedBy: 'Dr. Sarah Wilson',
+        patient: 'John Smith',
+        createdOn: '2024-12-15',
+        topCovers: 2,
+        pairOfInsoles: 1,
+        price: 125.50
+      },
+      {
+        id: 2,
+        prescriptionNumber: 'CNF-2024-008',
+        prescribedBy: 'Dr. Michael Chen',
+        patient: 'Emma Johnson',
+        createdOn: '2024-12-14',
+        topCovers: 4,
+        pairOfInsoles: 2,
+        price: 245.75
+      },
+      {
+        id: 3,
+        prescriptionNumber: 'CNF-2024-009',
+        prescribedBy: 'Dr. Lisa Davis',
+        patient: 'Robert Brown',
+        createdOn: '2024-12-13',
+        topCovers: 1,
+        pairOfInsoles: 1,
+        price: 89.99
+      }
+    ];
   }
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY
