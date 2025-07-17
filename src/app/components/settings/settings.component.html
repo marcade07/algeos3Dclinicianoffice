@@ -170,8 +170,8 @@
     
     <!-- Roles & Permissions -->
     <div *ngIf="activeSection === 'roles'">
-      <h3>Manage Roles & Permissions</h3>
-      <p class="text-muted mb-4">Configure user roles and their associated permissions for clinic operations.</p>
+      <h3>View Roles & Permissions</h3>
+      <p class="text-muted mb-4">View user roles and their associated permissions for your clinic operations.</p>
 
       <!-- Clinic Roles -->
       <div class="role-group mb-5">
@@ -184,7 +184,6 @@
               <div class="card-body text-center">
                 <i class="bi bi-person-fill-check" style="font-size: 2rem; color: var(--bs-gray-600);"></i>
                 <h5 class="card-title mt-2">Manager</h5>
-                <p class="card-text">Business partner management, order oversight and reporting access</p>
                 <button class="btn btn-outline-dark btn-sm" (click)="viewPermissions('Manager')">View Permissions</button>
               </div>
             </div>
@@ -194,7 +193,6 @@
               <div class="card-body text-center">
                 <i class="bi bi-person-heart" style="font-size: 2rem; color: var(--bs-gray-600);"></i>
                 <h5 class="card-title mt-2">Clinician</h5>
-                <p class="card-text">Patient care, prescription creation and confection management</p>
                 <button class="btn btn-outline-dark btn-sm" (click)="viewPermissions('Clinician')">View Permissions</button>
               </div>
             </div>
@@ -204,7 +202,6 @@
               <div class="card-body text-center">
                 <i class="bi bi-person-workspace" style="font-size: 2rem; color: var(--bs-gray-600);"></i>
                 <h5 class="card-title mt-2">Coordinator</h5>
-                <p class="card-text">Administrative coordination and patient data management</p>
                 <button class="btn btn-outline-dark btn-sm" (click)="viewPermissions('Coordinator')">View Permissions</button>
               </div>
             </div>
