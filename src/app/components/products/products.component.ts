@@ -44,7 +44,48 @@ export class ProductsComponent implements OnInit {
     this.dataService.getOtherProducts().subscribe(products => {
       // Separate products by type
       this.topCovers = products.filter(product => product.productType === 'Top Cover');
-      this.insoles = products.filter(product => product.productType === 'Insoles');
+      
+      // Create exactly two PA11 Custom Insole products
+      this.insoles = [
+        {
+          id: 1,
+          name: 'PA11 Left Custom Insole',
+          code: 'PA11-CUST-LEFT',
+          productType: 'Insoles',
+          description: 'Premium custom-molded left insole for maximum comfort and support',
+          stock: 150,
+          status: 'Active',
+          price: 89.99,
+          options: [
+            {
+              id: 'full-length',
+              name: 'Full Length',
+              enabled: true,
+              price: 10.00,
+              description: 'Option only available when designing a custom insole. Cannot be ordered alone.'
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: 'PA11 Right Custom Insole',
+          code: 'PA11-CUST-RIGHT',
+          productType: 'Insoles',
+          description: 'Premium custom-molded right insole for maximum comfort and support',
+          stock: 150,
+          status: 'Active',
+          price: 89.99,
+          options: [
+            {
+              id: 'full-length',
+              name: 'Full Length',
+              enabled: true,
+              price: 10.00,
+              description: 'Option only available when designing a custom insole. Cannot be ordered alone.'
+            }
+          ]
+        }
+      ];
       
       // Initialize filtered arrays
       this.filteredTopCovers = this.topCovers;
@@ -148,7 +189,8 @@ export class ProductsComponent implements OnInit {
 
   // Helper method to check if the insole is PA11 Custom Insole
   isPA11CustomInsole(insole: Product): boolean {
-    return insole.code === 'PA11-CUST-001' && insole.name === 'PA11 Custom Insole';
+    return (insole.code === 'PA11-CUST-LEFT' || insole.code === 'PA11-CUST-RIGHT') && 
+           insole.name.includes('PA11') && insole.name.includes('Custom Insole');
   }
 
   // Helper method to check if Full Length option should be shown in the modal
