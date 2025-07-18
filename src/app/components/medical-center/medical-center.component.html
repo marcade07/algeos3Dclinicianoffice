@@ -312,7 +312,7 @@
   </div>
 
   <div class="section-header">
-    <h2>Export Options</h2>
+    <h2>Export</h2>
   </div>
   <div class="export-grid">
     <div class="export-card">
@@ -321,6 +321,15 @@
       <p>Export all order data with detailed information</p>
       <button class="btn btn-dark btn-sm mt-2" (click)="exportOrders()">
         <i class="bi bi-download me-1"></i>Export Orders
+      </button>
+    </div>
+    
+    <div class="export-card">
+      <i class="bi bi-file-medical"></i>
+      <h6>Export Prescriptions</h6>
+      <p>Export prescription data with patient and practitioner details</p>
+      <button class="btn btn-dark btn-sm mt-2" (click)="exportPrescriptions()">
+        <i class="bi bi-download me-1"></i>Export Prescriptions
       </button>
     </div>
     
