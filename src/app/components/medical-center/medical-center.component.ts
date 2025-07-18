@@ -237,6 +237,11 @@ export class MedicalCenterComponent implements OnInit {
   // Export functionality (from Data Export component)
   
 
+  // Export Prescriptions (UI placeholder)
+  exportPrescriptions() {
+    console.log('Exporting Prescriptions...');
+    alert('Export Prescriptions functionality will be implemented later.');
+  }
 
   // Export Orders
   exportOrders() {
