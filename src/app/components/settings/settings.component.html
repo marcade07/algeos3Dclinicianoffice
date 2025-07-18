@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Settings</h1>
+  <h1>Account Information</h1>
 </div>
 
 <div class="settings-layout">
@@ -9,7 +9,7 @@
         <i class="bi bi-person-circle me-2"></i>My Account
       </a>
       <a class="nav-link" [class.active]="activeSection === 'roles'" (click)="activeSection = 'roles'">
-        <i class="bi bi-shield-check me-2"></i>Roles & Permissions
+        <i class="bi bi-shield-check me-2"></i>View Roles & Permissions
       </a>
     </nav>
   </div>
@@ -29,17 +29,21 @@
         <div class="account-form">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">First Name *</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                [(ngModel)]="accountData.firstName"
-                [readonly]="!isEditingAccount"
-                [class.form-control-plaintext]="!isEditingAccount"
-                placeholder="Enter your first name">
+              <label class="form-label">Title</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="accountData.title"
+                [disabled]="!isEditingAccount">
+                <option value="Dr.">Dr.</option>
+                <option value="Mr.">Mr.</option>
+                <option value="Mrs.">Mrs.</option>
+                <option value="Ms.">Ms.</option>
+                <option value="Miss">Miss</option>
+                <option value="Prof.">Prof.</option>
+              </select>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Last Name *</label>
+              <label class="form-label">First Name *</label>
               <input 
                 type="text" 
                 class="form-control" 
@@ -109,6 +113,75 @@
                 class="btn btn-outline-secondary" 
                 (click)="cancelAccountEdit()"
                 [disabled]="isSavingAccount">
+                <i class="bi bi-x-circle me-2"></i>Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Professional Registration Information -->
+      <div class="account-section">
+        <h4 class="account-section-title">
+          <i class="bi bi-award me-2"></i>Professional Registration Information
+        </h4>
+        
+        <div class="professional-form">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Professional Registration Body *</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="professionalData.registrationBody"
+                [disabled]="!isEditingProfessional"
+                *ngIf="isEditingProfessional">
+                <option value="GGC">GGC</option>
+                <option value="HCPC">HCPC</option>
+                <option value="PRFHC">PRFHC</option>
+                <option value="RFHP">RFHP</option>
+                <option value="GMC">GMC</option>
+                <option value="GOsC">GOsC</option>
+                <option value="GPhC">GPhC</option>
+              </select>
+              <input 
+                type="text" 
+                class="form-control-plaintext" 
+                [value]="professionalData.registrationBody"
+                readonly
+                *ngIf="!isEditingProfessional">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Professional Registration Number *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="professionalData.registrationNumber"
+                [readonly]="!isEditingProfessional"
+                [class.form-control-plaintext]="!isEditingProfessional"
+                placeholder="Enter your registration number">
+            </div>
+          </div>
+          
+          <div class="professional-actions">
+            <div *ngIf="!isEditingProfessional">
+              <button class="btn btn-primary" (click)="editProfessional()">
+                <i class="bi bi-pencil me-2"></i>Edit Information
+              </button>
+            </div>
+            
+            <div *ngIf="isEditingProfessional" class="d-flex gap-2">
+              <button 
+                class="btn btn-success" 
+                (click)="saveProfessionalChanges()"
+                [disabled]="isSavingProfessional">
+                <i class="bi bi-check-circle me-2" *ngIf="!isSavingProfessional"></i>
+                <i class="bi bi-hourglass-split me-2" *ngIf="isSavingProfessional"></i>
+                {{ isSavingProfessional ? 'Saving...' : 'Save Changes' }}
+              </button>
+              <button 
+                class="btn btn-outline-secondary" 
+                (click)="cancelProfessionalEdit()"
+                [disabled]="isSavingProfessional">
                 <i class="bi bi-x-circle me-2"></i>Cancel
               </button>
             </div>

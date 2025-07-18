@@ -17,6 +17,6 @@ export class SidebarComponent {
   constructor(private router: Router) {}
 
   navigateToMyAccount(): void {
-    this.router.navigate(['/settings']);
+    this.router.navigate(['/account-information']);
   }
 }

@@ -14,11 +14,18 @@ export class SettingsComponent {
   
   // My Account form data
   accountData = {
+    title: 'Dr.',
     firstName: 'Sarah',
     lastName: 'Johnson',
     email: 'sarah.johnson@algeos.com',
     phoneNumber: '+44 20 7946 0958',
     role: 'Administrator'
+  };
+  
+  // Professional Registration form data
+  professionalData = {
+    registrationBody: 'HCPC',
+    registrationNumber: 'POD12345'
   };
   
   // Password change form data
@@ -30,7 +37,9 @@ export class SettingsComponent {
   
   // Form states
   isEditingAccount = false;
+  isEditingProfessional = false;
   isSavingAccount = false;
+  isSavingProfessional = false;
   isSavingPassword = false;
 
   // View permissions method - read-only functionality
@@ -48,6 +57,7 @@ export class SettingsComponent {
     this.isEditingAccount = false;
     // Reset form data to original values
     this.accountData = {
+      title: 'Dr.',
       firstName: 'Sarah',
       lastName: 'Johnson',
       email: 'sarah.johnson@algeos.com',
@@ -77,6 +87,37 @@ export class SettingsComponent {
       this.isEditingAccount = false;
       console.log('Account updated:', this.accountData);
       alert('Account information updated successfully!');
+    }, 1000);
+  }
+  
+  // Professional Registration methods
+  editProfessional(): void {
+    this.isEditingProfessional = true;
+  }
+  
+  cancelProfessionalEdit(): void {
+    this.isEditingProfessional = false;
+    // Reset form data to original values
+    this.professionalData = {
+      registrationBody: 'HCPC',
+      registrationNumber: 'POD12345'
+    };
+  }
+  
+  saveProfessionalChanges(): void {
+    if (!this.professionalData.registrationBody || !this.professionalData.registrationNumber.trim()) {
+      alert('Professional registration body and number are required.');
+      return;
+    }
+    
+    this.isSavingProfessional = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+      this.isSavingProfessional = false;
+      this.isEditingProfessional = false;
+      console.log('Professional registration updated:', this.professionalData);
+      alert('Professional registration information updated successfully!');
     }, 1000);
   }
   

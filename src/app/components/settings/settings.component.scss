@@ -288,6 +288,82 @@
   }
 }
 
+// Professional form styles (same as account form)
+.professional-form {
+  .form-label {
+    font-weight: 500;
+    color: var(--primary-black);
+    margin-bottom: 8px;
+    
+    &::after {
+      content: ' *';
+      color: #dc3545;
+    }
+  }
+  
+  .form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      border-color: var(--primary-black);
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    &.form-control-plaintext {
+      background-color: transparent;
+      border: 1px solid transparent;
+      padding-left: 0;
+      font-weight: 500;
+      color: var(--primary-black);
+    }
+    
+    &:disabled {
+      background-color: transparent;
+      border: 1px solid transparent;
+      padding-left: 0;
+      font-weight: 500;
+      color: var(--primary-black);
+    }
+  }
+  
+  .form-text {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    color: var(--bs-gray-600);
+  }
+}
+
+// Professional actions (same as account actions)
+.professional-actions {
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-2);
+  border-top: 1px solid var(--bs-gray-300);
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    
+    i {
+      font-size: 0.875rem;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+  
+  .d-flex {
+    gap: 12px;
+  }
+}
+
 // Responsive design for account sections
 @media (max-width: 768px) {
   .account-section {
@@ -300,6 +376,7 @@
   }
   
   .account-actions,
+  .professional-actions,
   .password-actions {
     .btn {
       width: 100%;
