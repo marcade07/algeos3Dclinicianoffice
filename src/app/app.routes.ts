@@ -12,8 +12,9 @@ import { MedicalCenterComponent } from './components/medical-center/medical-cent
 import { CartComponent } from './components/cart/cart.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/medical-center', pathMatch: 'full' },
-  { path: 'medical-center', component: MedicalCenterComponent },
+  { path: '', redirectTo: '/business-premise', pathMatch: 'full' },
+  { path: 'business-premise', component: MedicalCenterComponent },
+  { path: 'medical-center', redirectTo: '/business-premise', pathMatch: 'full' },
   { path: 'patients', component: PatientsComponent },
   { path: 'prescriptions', component: ConfectionsComponent },
   { path: 'confections', redirectTo: '/prescriptions', pathMatch: 'full' },
