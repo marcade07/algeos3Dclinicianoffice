@@ -1,6 +1,6 @@
 <!-- Page Header -->
 <div class="page-header">
-  <h1>Cart</h1>
+  <h1>Basket</h1>
 </div>
 
 <!-- Main Content -->
@@ -10,8 +10,8 @@
     <!-- Pending Prescriptions Table -->
     <div class="cart-section">
       <div class="section-header">
-        <h2><i class="bi bi-file-medical me-2"></i>Pending Prescriptions</h2>
-        <p class="section-subtitle">All pending prescriptions added by practitioners</p>
+        <h2><i class="bi bi-file-medical me-2"></i>Prescriptions in Basket</h2>
+        <p class="section-subtitle">All prescriptions added by practitioners</p>
       </div>
 
       <div class="data-table" *ngIf="pendingPrescriptions.length > 0; else emptyCart">
@@ -23,9 +23,9 @@
                 <th>Prescribed by</th>
                 <th>Patient</th>
                 <th>Created on</th>
-                <th class="text-center">Top Covers</th>
-                <th class="text-center">Pair of Insoles</th>
-                <th>Price (£)</th>
+                <th class="text-center">Top Covers (pairs)</th>
+                <th class="text-center">Insoles</th>
+                <th>Price (Excl. VAT)</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -56,8 +56,8 @@
       <ng-template #emptyCart>
         <div class="empty-cart">
           <i class="bi bi-file-earmark-text empty-icon"></i>
-          <h4>No pending prescriptions</h4>
-          <p class="text-muted">Add prescriptions to your cart to continue with your order.</p>
+          <h4>No prescriptions in basket</h4>
+          <p class="text-muted">Add prescriptions to your basket to continue with your order.</p>
         </div>
       </ng-template>
     </div>
@@ -162,24 +162,28 @@
       
       <div class="summary-items">
         <div class="summary-item">
-          <span class="summary-label">Total Pairs of Insoles:</span>
+          <span class="summary-label">Total Insoles:</span>
           <span class="summary-value">{{ getTotalPairsOfInsoles() }}</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">Total Top Covers:</span>
+          <span class="summary-label">Total Top Covers (Pairs):</span>
           <span class="summary-value">{{ getTotalTopCovers() }}</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">Subtotal:</span>
+          <span class="summary-label">Subtotal (Excl. VAT):</span>
           <span class="summary-value">£{{ getSubtotal().toFixed(2) }}</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">Shipping:</span>
+          <span class="summary-label">Delivery:</span>
           <span class="summary-value">£{{ getShippingCost().toFixed(2) }}</span>
         </div>
+        <div class="summary-item">
+          <span class="summary-label">VAT:</span>
+          <span class="summary-value">£{{ (getSubtotal() * 0.2).toFixed(2) }}</span>
+        </div>
         <div class="summary-item total-item">
-          <span class="summary-label">Total:</span>
-          <span class="summary-value">£{{ getTotal().toFixed(2) }}</span>
+          <span class="summary-label">TOTAL:</span>
+          <span class="summary-value">£{{ (getTotal() + (getSubtotal() * 0.2)).toFixed(2) }}</span>
         </div>
       </div>
 
@@ -260,15 +264,15 @@
         <div class="recap-items">
           <div class="recap-item">
             <span>Subtotal:</span>
-            <span>£{{ getSubtotal().toFixed(2) }}</span>
+            <span>£{{ (getSubtotal() + (getSubtotal() * 0.2)).toFixed(2) }}</span>
           </div>
           <div class="recap-item">
-            <span>Shipping:</span>
+            <span>Delivery:</span>
             <span>£{{ getShippingCost().toFixed(2) }}</span>
           </div>
           <div class="recap-item total">
             <span>Total:</span>
-            <span>£{{ getTotal().toFixed(2) }}</span>
+            <span>£{{ (getTotal() + (getSubtotal() * 0.2)).toFixed(2) }}</span>
           </div>
         </div>
       </div>
@@ -312,7 +316,7 @@
             </div>
             <div class="detail-item">
               <span class="label">Total Amount:</span>
-              <span class="value">£{{ getTotal().toFixed(2) }}</span>
+              <span class="value">£{{ (getTotal() + (getSubtotal() * 0.2)).toFixed(2) }}</span>
             </div>
             <div class="detail-item">
               <span class="label">Payment Method:</span>
