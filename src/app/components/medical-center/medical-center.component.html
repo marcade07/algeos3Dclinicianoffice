@@ -19,6 +19,12 @@
     </button>
     <button 
       class="nav-link" 
+      [class.active]="activeTab === 'addresses'"
+      (click)="setActiveTab('addresses')">
+      Addresses
+    </button>
+    <button 
+      class="nav-link" 
       [class.active]="activeTab === 'export'"
       (click)="setActiveTab('export')">
       Export
@@ -191,6 +197,92 @@
   </div>
 </div>
 
+<!-- Addresses Tab Content -->
+<div *ngIf="activeTab === 'addresses'" class="tab-content">
+  <!-- Address Selection Section -->
+  <div class="addresses-selection-section">
+    <div class="row">
+      <!-- Delivery Address Selection -->
+      <div class="col-md-6 mb-4">
+        <div class="address-selection-card">
+          <div class="card-header">
+            <h4><i class="bi bi-truck me-2"></i>Delivery Address</h4>
+          </div>
+          <div class="card-body">
+            <select 
+              class="form-select" 
+              [(ngModel)]="selectedDeliveryAddressId"
+              (ngModelChange)="onDeliveryAddressChange()">
+              <option value="">Select delivery address</option>
+              <option *ngFor="let address of registeredAddresses" [value]="address.id">
+                {{ address.name }} - {{ getFullAddress(address) }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Billing Address Selection -->
+      <div class="col-md-6 mb-4">
+        <div class="address-selection-card">
+          <div class="card-header">
+            <h4><i class="bi bi-receipt me-2"></i>Billing Address</h4>
+          </div>
+          <div class="card-body">
+            <select 
+              class="form-select" 
+              [(ngModel)]="selectedBillingAddressId"
+              (ngModelChange)="onBillingAddressChange()">
+              <option value="">Select billing address</option>
+              <option *ngFor="let address of registeredAddresses" [value]="address.id">
+                {{ address.name }} - {{ getFullAddress(address) }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Registered Addresses Section -->
+  <div class="registered-addresses-section">
+    <div class="section-header">
+      <h2>Registered Addresses</h2>
+      <button class="btn btn-dark" (click)="openAddAddressModal()">
+        <i class="bi bi-plus me-1"></i>Add Address
+      </button>
+    </div>
+    
+    <div class="addresses-grid">
+      <div class="address-card" *ngFor="let address of registeredAddresses">
+        <div class="address-card-header">
+          <h5>{{ address.name }}</h5>
+          <div class="address-actions">
+            <button class="btn btn-sm btn-outline-dark" title="Edit Address" (click)="editAddress(address)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" title="Delete Address" (click)="deleteAddress(address)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="address-card-body">
+          <div class="address-details">
+            <p class="address-line">{{ address.streetAddress }}</p>
+            <p class="address-line">{{ address.city }}, {{ address.postcode }}</p>
+          </div>
+          
+          <div class="address-labels" *ngIf="address.isDefaultDelivery || address.isDefaultBilling">
+            <span class="badge bg-primary me-1" *ngIf="address.isDefaultDelivery">Default Delivery</span>
+            <span class="badge bg-success" *ngIf="address.isDefaultBilling">Default Billing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Export Tab Content -->
 <div *ngIf="activeTab === 'export'" class="tab-content">
   <div class="control-bar">
@@ -238,6 +330,102 @@
       <p>Export invoices</p>
       <button class="btn btn-dark btn-sm mt-2" (click)="exportInvoices()">
         <i class="bi bi-download me-1"></i>Export Invoices
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Address Modal -->
+<div class="modal-overlay" *ngIf="showAddressModal" (click)="closeAddressModal()">
+  <div class="address-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-info">
+        <h3><i class="bi bi-geo-alt me-2"></i>{{ isEditMode ? 'Edit' : 'Add' }} Address</h3>
+        <p *ngIf="isEditMode && selectedAddress" class="address-name">{{ selectedAddress.name }}</p>
+      </div>
+      <button class="btn-close" (click)="closeAddressModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">Address Name *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="addressForm.name" 
+              placeholder="e.g., Main Office, Secondary Location"
+              required>
+          </div>
+          
+          <div class="form-group full-width">
+            <label class="form-label">Street Address *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="addressForm.streetAddress" 
+              placeholder="e.g., 123 Healthcare Drive"
+              required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="addressForm.city" 
+              placeholder="e.g., London"
+              required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Postcode *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="addressForm.postcode" 
+              placeholder="e.g., W1A 1AA"
+              required>
+          </div>
+          
+          <div class="form-group full-width">
+            <div class="form-check-group">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="defaultDelivery"
+                  [(ngModel)]="addressForm.isDefaultDelivery">
+                <label class="form-check-label" for="defaultDelivery">
+                  Set as default delivery address
+                </label>
+              </div>
+              
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="defaultBilling"
+                  [(ngModel)]="addressForm.isDefaultBilling">
+                <label class="form-check-label" for="defaultBilling">
+                  Set as default billing address
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary" (click)="closeAddressModal()">
+        <i class="bi bi-x-circle me-2"></i>Cancel
+      </button>
+      <button class="btn btn-primary" (click)="saveAddress()" [disabled]="!isAddressFormValid()">
+        <i class="bi bi-check-circle me-2"></i>{{ isEditMode ? 'Update' : 'Add' }} Address
       </button>
     </div>
   </div>
