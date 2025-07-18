@@ -179,7 +179,7 @@
         <tbody>
           <tr *ngFor="let invoice of filteredInvoices">
             <td>{{ formatDateToEuropean(invoice.dateIssued) }}</td>
-            <td class="monospace">ORD-{{ invoice.id.split('-')[2] }}-{{ String(Math.floor(Math.random() * 100) + 1).padStart(3, '0') }}</td>
+            <td class="monospace">{{ generateOrderIdFromInvoice(invoice) }}</td>
             <td>£{{ invoice.amount.toFixed(2) }}</td>
             <td>{{ invoice.invoicedTo }}</td>
             <td class="action-buttons">

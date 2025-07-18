@@ -507,6 +507,14 @@ export class MedicalCenterComponent implements OnInit {
     }
   }
   
+  // Helper method to generate Order ID from invoice ID
+  generateOrderIdFromInvoice(invoice: Invoice): string {
+    const invoiceNumber = invoice.id.split('-')[2];
+    const randomSuffix = Math.floor(Math.random() * 100) + 1;
+    const paddedSuffix = String(randomSuffix).padStart(3, '0');
+    return `ORD-${invoiceNumber}-${paddedSuffix}`;
+  }
+
   // Update delivery address selection
   onDeliveryAddressChange(): void {
     const selectedAddress = this.getAddressById(this.selectedDeliveryAddressId);
