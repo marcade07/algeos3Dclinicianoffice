@@ -12,7 +12,7 @@ import { User, Invoice } from '../../interfaces/common.interfaces';
   styleUrl: './medical-center.component.scss'
 })
 export class MedicalCenterComponent implements OnInit {
-  activeTab: 'users' | 'invoices' | 'export' = 'users';
+  activeTab: 'users' | 'invoices' | 'addresses' | 'export' = 'users';
   
   // Users data (from Users component)
   users: User[] = [];
@@ -30,16 +30,35 @@ export class MedicalCenterComponent implements OnInit {
   
   // Export data (from Data Export component)
   exportFormat: string = 'csv';
+  
+  // Addresses data
+  selectedDeliveryAddressId: string = '';
+  selectedBillingAddressId: string = '';
+  registeredAddresses: any[] = [];
+  
+  // Address modal properties
+  showAddressModal: boolean = false;
+  isEditMode: boolean = false;
+  selectedAddress: any = null;
+  addressForm = {
+    name: '',
+    streetAddress: '',
+    city: '',
+    postcode: '',
+    isDefaultDelivery: false,
+    isDefaultBilling: false
+  };
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.loadUsersData();
     this.loadInvoicesData();
+    this.loadAddressesData();
   }
 
   // Tab management
-  setActiveTab(tab: 'users' | 'invoices' | 'export') {
+  setActiveTab(tab: 'users' | 'invoices' | 'addresses' | 'export') {
     this.activeTab = tab;
   }
 
@@ -302,6 +321,200 @@ export class MedicalCenterComponent implements OnInit {
     } else {
       console.error('Download not supported in this browser');
       alert('Download not supported in this browser');
+    }
+  }
+  
+  // Addresses functionality
+  loadAddressesData() {
+    // Mock addresses data for London Podiatry Centre
+    this.registeredAddresses = [
+      {
+        id: 'lpc-main',
+        name: 'London Podiatry Centre - Main',
+        streetAddress: '123 Healthcare Drive',
+        city: 'London',
+        postcode: 'W1A 1AA',
+        isDefaultDelivery: true,
+        isDefaultBilling: true
+      },
+      {
+        id: 'lpc-secondary',
+        name: 'London Podiatry Centre - Secondary',
+        streetAddress: '456 Medical Plaza',
+        city: 'London',
+        postcode: 'SW1A 2BB',
+        isDefaultDelivery: false,
+        isDefaultBilling: false
+      },
+      {
+        id: 'lpc-warehouse',
+        name: 'London Podiatry Centre - Warehouse',
+        streetAddress: '789 Storage Avenue',
+        city: 'London',
+        postcode: 'E1A 3CC',
+        isDefaultDelivery: false,
+        isDefaultBilling: false
+      }
+    ];
+    
+    // Set default selections
+    const defaultDelivery = this.registeredAddresses.find(addr => addr.isDefaultDelivery);
+    const defaultBilling = this.registeredAddresses.find(addr => addr.isDefaultBilling);
+    
+    this.selectedDeliveryAddressId = defaultDelivery ? defaultDelivery.id : '';
+    this.selectedBillingAddressId = defaultBilling ? defaultBilling.id : '';
+  }
+  
+  // Get full address string for display
+  getFullAddress(address: any): string {
+    return `${address.streetAddress}, ${address.city}, ${address.postcode}`;
+  }
+  
+  // Get address by ID
+  getAddressById(id: string): any {
+    return this.registeredAddresses.find(addr => addr.id === id);
+  }
+  
+  // Open add address modal
+  openAddAddressModal(): void {
+    this.isEditMode = false;
+    this.selectedAddress = null;
+    this.addressForm = {
+      name: '',
+      streetAddress: '',
+      city: '',
+      postcode: '',
+      isDefaultDelivery: false,
+      isDefaultBilling: false
+    };
+    this.showAddressModal = true;
+  }
+  
+  // Edit address
+  editAddress(address: any): void {
+    this.isEditMode = true;
+    this.selectedAddress = address;
+    this.addressForm = { ...address };
+    this.showAddressModal = true;
+  }
+  
+  // Close address modal
+  closeAddressModal(): void {
+    this.showAddressModal = false;
+    this.isEditMode = false;
+    this.selectedAddress = null;
+    this.addressForm = {
+      name: '',
+      streetAddress: '',
+      city: '',
+      postcode: '',
+      isDefaultDelivery: false,
+      isDefaultBilling: false
+    };
+  }
+  
+  // Validate address form
+  isAddressFormValid(): boolean {
+    return !!(
+      this.addressForm.name.trim() &&
+      this.addressForm.streetAddress.trim() &&
+      this.addressForm.city.trim() &&
+      this.addressForm.postcode.trim()
+    );
+  }
+  
+  // Save address
+  saveAddress(): void {
+    if (!this.isAddressFormValid()) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    
+    if (this.isEditMode && this.selectedAddress) {
+      // Update existing address
+      const index = this.registeredAddresses.findIndex(addr => addr.id === this.selectedAddress.id);
+      if (index !== -1) {
+        // Handle default address logic
+        if (this.addressForm.isDefaultDelivery) {
+          this.registeredAddresses.forEach(addr => addr.isDefaultDelivery = false);
+        }
+        if (this.addressForm.isDefaultBilling) {
+          this.registeredAddresses.forEach(addr => addr.isDefaultBilling = false);
+        }
+        
+        this.registeredAddresses[index] = {
+          ...this.registeredAddresses[index],
+          ...this.addressForm
+        };
+        
+        // Update selected addresses if this was the selected one
+        if (this.addressForm.isDefaultDelivery) {
+          this.selectedDeliveryAddressId = this.registeredAddresses[index].id;
+        }
+        if (this.addressForm.isDefaultBilling) {
+          this.selectedBillingAddressId = this.registeredAddresses[index].id;
+        }
+        
+        console.log('Updated address:', this.registeredAddresses[index]);
+        alert(`Address "${this.addressForm.name}" has been updated successfully!`);
+      }
+    } else {
+      // Add new address
+      const newAddress = {
+        id: 'addr-' + Date.now(),
+        ...this.addressForm
+      };
+      
+      // Handle default address logic
+      if (newAddress.isDefaultDelivery) {
+        this.registeredAddresses.forEach(addr => addr.isDefaultDelivery = false);
+        this.selectedDeliveryAddressId = newAddress.id;
+      }
+      if (newAddress.isDefaultBilling) {
+        this.registeredAddresses.forEach(addr => addr.isDefaultBilling = false);
+        this.selectedBillingAddressId = newAddress.id;
+      }
+      
+      this.registeredAddresses.push(newAddress);
+      console.log('Added new address:', newAddress);
+      alert(`Address "${this.addressForm.name}" has been added successfully!`);
+    }
+    
+    this.closeAddressModal();
+  }
+  
+  // Delete address
+  deleteAddress(address: any): void {
+    if (confirm(`Are you sure you want to delete address "${address.name}"?`)) {
+      // Check if this is the selected delivery or billing address
+      if (this.selectedDeliveryAddressId === address.id) {
+        this.selectedDeliveryAddressId = '';
+      }
+      if (this.selectedBillingAddressId === address.id) {
+        this.selectedBillingAddressId = '';
+      }
+      
+      // Remove from array
+      this.registeredAddresses = this.registeredAddresses.filter(addr => addr.id !== address.id);
+      
+      console.log('Deleted address:', address.name);
+      alert(`Address "${address.name}" has been deleted.`);
+    }
+  }
+  
+  // Update delivery address selection
+  onDeliveryAddressChange(): void {
+    const selectedAddress = this.getAddressById(this.selectedDeliveryAddressId);
+    if (selectedAddress) {
+      console.log('Selected delivery address:', selectedAddress.name);
+    }
+  }
+  
+  // Update billing address selection
+  onBillingAddressChange(): void {
+    const selectedAddress = this.getAddressById(this.selectedBillingAddressId);
+    if (selectedAddress) {
+      console.log('Selected billing address:', selectedAddress.name);
     }
   }
 }
